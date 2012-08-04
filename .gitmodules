@@ -1,0 +1,6 @@
+[submodule "map_jqm/externals/stapes"]
+	path = map_jqm/externals/stapes
+	url = git://github.com/hay/stapes.git
+[submodule "map_jqm/externals/mustache"]
+	path = map_jqm/externals/mustache
+	url = git://github.com/janl/mustache.js.git
