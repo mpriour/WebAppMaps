@@ -4,3 +4,12 @@
 [submodule "map_jqm/externals/mustache"]
 	path = map_jqm/externals/mustache
 	url = git://github.com/janl/mustache.js.git
+[submodule "externals/openlayers"]
+	path = externals/openlayers
+	url = git://github.com/openlayers/openlayers.git
+[submodule "externals/leaflet"]
+	path = externals/leaflet
+	url = git://github.com/CloudMade/Leaflet.git
+[submodule "map_st2/ux/Leaflet"]
+	path = map_st2/ux/Leaflet
+	url = git://github.com/VinylFox/Ext.ux.touch.Leaflet.git
