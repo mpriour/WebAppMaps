@@ -10,7 +10,7 @@
 
 /**
  * Wraps an OpenLayers Map in an Ext.Component.
- * Implements the same public API as Ext.map.OpenLayers
+ * Implements the same public API as Ext.Map
  * ## Example
  *
  *     Ext.Viewport.add({
