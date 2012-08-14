@@ -105,12 +105,13 @@ Ext.define('Ext.map.OpenLayers', {
 
     constructor: function() {
         this.callParent(arguments);
-        this.options = {};
+        this.options = this.options || {};
         this.element.setVisibilityMode(Ext.Element.OFFSETS);
     },
 
     initialize: function() {
         this.callParent();
+        this.options = this.options || {};
         this.buildDefaultBaseLayer(this.getDefaultBaseLayer());
         if(!this.getGeo()){ 
             this.setGeo(new Ext.util.GeoLocation({
@@ -199,22 +200,29 @@ Ext.define('Ext.map.OpenLayers', {
         
         if(!mapOptions.baseLayer && this.options.defaultBaseLayer){
             layers[0] = this.options.defaultBaseLayer;
+            delete mapOptions.defaultBaseLayer;
         } else {
             layers[0] = mapOptions.baseLayer;
+            delete mapOptions.baseLayer;
         }
         
-        var defaultCenter = OpenLayers.LonLat.fromArray([39.290555, -76.609604]);
+        if(mapOptions.layers){
+            layers = layers.concat(mapOptions.layers);
+            delete mapOptions.layers;
+        }
+        
+        var defaultCenter = OpenLayers.LonLat.fromArray([-76.609604, 39.290555]);
         if(!mapOptions.projection){
             defaultCenter.transform("EPSG:4326","EPSG:3857");
         } else if (["CRS:84", "urn:ogc:def:crs:EPSG:6.6:4326", "EPSG:4326"].indexOf(mapOptions.projection) == -1){
             defaultCenter.transform("EPSG:4326", mapOptions.projection);
         }
 
-        mapOptions = Ext.merge({
-            layers : layers,
+        mapOptions = Ext.applyIf({
+            layers: layers,
             zoom : this.getZoomLevel() || 12,
             maxZoom : 18,
-            center : this.getCenter() || defaultCenter,
+            center : this.getMapCenter() || defaultCenter,
             projection: 'EPSG:3857'
         }, mapOptions);
 
@@ -274,8 +282,11 @@ Ext.define('Ext.map.OpenLayers', {
         
         if (map && coordinates instanceof OpenLayers.LonLat) {
             //test for a passed projection or a map that is not in "Geographic" coordinates
-            if(proj || ["CRS:84", "urn:ogc:def:crs:EPSG:6.6:4326", "EPSG:4326"].indexOf(map.getProjection()) == -1){
-                coordinates.transform("EPSG:4326", map.getProjectionObject());
+            var mapproj = map.getProjectionObject();
+            if(proj && proj != mapproj.getCode()){
+                coordinates.transform(proj, mapproj);
+            } else if(["CRS:84", "urn:ogc:def:crs:EPSG:6.6:4326", "EPSG:4326"].indexOf(map.getProjection()) == -1){
+                coordinates.transform("EPSG:4326", mapproj);
             }
             map.setCenter(coordinates, this.getZoomLevel());
         }

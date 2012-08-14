@@ -1,3 +1,11 @@
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        map: "app"
+    }
+});
+
 Ext.application({
     name: 'map',
 

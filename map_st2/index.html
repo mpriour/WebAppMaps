@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>map</title>
+    <!-- <link type="text/javascript" href="../externals/openlayers/theme/default/style.mobile.css" /> -->
     <style type="text/css">
          /**
          * Example of an initial loading indicator.
@@ -48,9 +49,17 @@
                 opacity: 0.8
             }
         }
+        .olMap {
+            height: 100%;
+            width: 100%;
+        }
     </style>
+    <script type="text/javascript" src="../externals/openlayers/lib/OpenLayers.js"></script>
+    <!--<script type="text/javascript" src="../externals/leaflet/debug/leaflet-include.js"></script>-->
     <!-- The line below must be kept intact for Sencha Command to build your application -->
     <script id="microloader" type="text/javascript" src="sdk/microloader/development.js"></script>
+    <script type="text/javascript" src="app/ux/Ext.ux.OpenLayers.js"></script>
+    <!--<script type="text/javascript" src="app/ux/Ext.ux.Leaflet.js"></script>-->
 </head>
 <body>
     <div id="appLoadingIndicator">
