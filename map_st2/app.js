@@ -2,7 +2,8 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-        map: "app"
+        map: "app",
+        'Ext.map': 'ux/map'
     }
 });
 
