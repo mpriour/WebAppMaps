@@ -2,7 +2,7 @@ Ext.define("map.view.Main", {
     extend: 'Ext.Panel',
     requires: [
         'Ext.TitleBar',
-        'Ext.map.OpenLayers'
+        'map.view.maps.OpenLayers'
     ],
     config: {
         layout:{
@@ -13,7 +13,8 @@ Ext.define("map.view.Main", {
             xtype: 'titlebar',
             title: 'Welcome to Sencha Touch 2'
         },{
-            xtype: 'openlayers'
+            xtype: 'map_openlayers',
+            useCurrentLocation: false
         }]
     }
 });

@@ -103,9 +103,9 @@ Ext.define('Ext.map.OpenLayers', {
         defaultBaseLayer: 'OSM' 
     },
 
-    constructor: function() {
+    constructor: function(options) {
         this.callParent(arguments);
-        this.options = this.options || {};
+        this.options = Ext.apply(this.options || {}, options);
         this.element.setVisibilityMode(Ext.Element.OFFSETS);
     },
 
@@ -113,9 +113,9 @@ Ext.define('Ext.map.OpenLayers', {
         this.callParent();
         this.options = this.options || {};
         this.buildDefaultBaseLayer(this.getDefaultBaseLayer());
-        if(!this.getGeo()){ 
+        if(!this.getGeo() && this.getUseCurrentLocation()){ 
             this.setGeo(new Ext.util.GeoLocation({
-                autoLoad : this.getUseCurrentLocation()
+                autoLoad : true
             }));
         }
         this.on({
@@ -146,7 +146,11 @@ Ext.define('Ext.map.OpenLayers', {
     },
 
     updateUseCurrentLocation: function(useCurrentLocation) {
-        this.setGeo(useCurrentLocation);
+        var geo = this.getGeo();
+        if(geo){
+            geo.setAutoUpdate(useCurrentLocation);    
+        }
+        this._useCurrentLocation = useCurrentLocation;
     },
     
     getZoomLevel: function(){
@@ -211,25 +215,25 @@ Ext.define('Ext.map.OpenLayers', {
             delete mapOptions.layers;
         }
         
-        var defaultCenter = OpenLayers.LonLat.fromArray([-76.609604, 39.290555]);
+        var defaultCenter = mapOptions.center || OpenLayers.LonLat.fromArray([-76.609604, 39.290555]);
         if(!mapOptions.projection){
             defaultCenter.transform("EPSG:4326","EPSG:3857");
         } else if (["CRS:84", "urn:ogc:def:crs:EPSG:6.6:4326", "EPSG:4326"].indexOf(mapOptions.projection) == -1){
             defaultCenter.transform("EPSG:4326", mapOptions.projection);
         }
+        mapOptions.center = defaultCenter;
 
-        mapOptions = Ext.applyIf({
+        mapOptions = Ext.apply({
             layers: layers,
             zoom : this.getZoomLevel() || 12,
             maxZoom : 18,
-            center : this.getMapCenter() || defaultCenter,
             projection: 'EPSG:3857'
         }, mapOptions);
 
         var map = new OpenLayers.Map(element.id, mapOptions);
         map.events.on({
             'moveend': function(evt){
-                if(evt.zoomChanged){
+                if(this.options.zoom != evt.object.zoom){
                     this.onZoomChange();
                 }
                 this.onCenterChange();
@@ -294,9 +298,6 @@ Ext.define('Ext.map.OpenLayers', {
             this.options = Ext.apply(this.getMapOptions(), {
                 center: coordinates
             });
-            if (!map) {
-                me.renderMap();
-            }
         }
     },
     
@@ -311,9 +312,6 @@ Ext.define('Ext.map.OpenLayers', {
                 this.options = Ext.apply(this.getMapOptions(), {
                     zoom: newZoom
                 });
-                if(!map){
-                    me.renderMap();
-                }
             }
         }
     },

@@ -11,10 +11,16 @@ Ext.application({
     name: 'map',
 
     requires: [
-        'Ext.MessageBox'
+        'Ext.MessageBox', 'map.util.Config'
     ],
 
-    views: ['Main'],
+    views: ['FilterForm', 'Main', 'maps.OpenLayers'],
+    
+    stores: ['Years', 'Media', 'Closures'],
+    
+    models: ['Year', 'Media', 'Closure'],
+    
+    controllers: ['maps.OpenLayers'],
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -39,6 +45,7 @@ Ext.application({
         Ext.fly('appLoadingIndicator').destroy();
 
         // Initialize the main view
+        //Ext.Viewport.add(Ext.create('map.view.FilterForm'));
         Ext.Viewport.add(Ext.create('map.view.Main'));
     },
 
