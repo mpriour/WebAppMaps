@@ -14,13 +14,13 @@ Ext.application({
         'Ext.MessageBox', 'map.util.Config'
     ],
 
-    views: ['FilterForm', 'Main', 'maps.OpenLayers'],
+    views: ['FilterForm', 'MapPanel', 'maps.OpenLayers'],
     
     stores: ['Years', 'Media', 'Closures'],
     
     models: ['Year', 'Media', 'Closure'],
     
-    controllers: ['maps.OpenLayers'],
+    controllers: ['FilterForm', 'maps.OpenLayers', 'MapPanel'],
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -43,10 +43,10 @@ Ext.application({
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
-
+        
         // Initialize the main view
-        //Ext.Viewport.add(Ext.create('map.view.FilterForm'));
-        Ext.Viewport.add(Ext.create('map.view.Main'));
+        Ext.Viewport.add(Ext.create('map.view.MapPanel'));
+        Ext.Viewport.setActiveItem(Ext.Viewport.add(Ext.create('map.view.FilterForm')));
     },
 
     onUpdated: function() {

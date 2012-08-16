@@ -1,15 +1,17 @@
 Ext.define("map.view.FilterForm", {
     extend: "Ext.Panel",
     requires: ['Ext.field.Select', 'Ext.form.FieldSet', 'Ext.data.reader.Array', 'Ext.Button'],
+    alias: 'widget.FilterForm',
     config: {
         items: [{
             xtype: 'fieldset',
             title: 'Symbolize By',
             items: [{
+                id: 'selectSymbol',
                 xtype: 'selectfield',
                 options: [{
-                    text: 'Year',
-                    value: 'years'
+                    text: 'Decade',
+                    value: 'decade'
                 }, {
                     text: 'Media',
                     value: 'media'
@@ -22,6 +24,7 @@ Ext.define("map.view.FilterForm", {
             xtype: 'fieldset',
             title: 'Filter By Year',
             items: [{
+                id: 'selectYearFilter',
                 xtype: 'selectfield',
                 store: 'Years',
                 displayField: 'year',
@@ -31,6 +34,7 @@ Ext.define("map.view.FilterForm", {
             xtype: 'fieldset',
             title: 'Filter By Media',
             items: [{
+                id: 'selectMediaFilter',
                 xtype: 'selectfield',
                 store: 'Media',
                 displayField: 'media',
@@ -48,12 +52,15 @@ Ext.define("map.view.FilterForm", {
             items: [{
                 xtype: 'spacer'
             }, {
+                id: 'btnLeafletViewer',
                 xtype: 'button',
                 text: 'Leaflet',
+                disabled: true,
                 flex: 3
             }, {
                 xtype: 'spacer'
             }, {
+                id: 'btnOpenLayersViewer',
                 xtype: 'button',
                 text: 'OpenLayers',
                 flex: 3

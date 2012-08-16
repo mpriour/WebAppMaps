@@ -120,6 +120,7 @@ Ext.define('Ext.map.OpenLayers', {
         }
         this.on({
             painted: 'renderMap',
+            single: true,
             scope: this
         });
         this.element.on('touchstart', 'onTouchStart', this);

@@ -3,22 +3,30 @@ Ext.define('map.controller.maps.OpenLayers', {
     requires: ['map.store.Closures'],
 
     config: {
-        stores: ['Closures'],
-
         refs: {
-            'mapWrap': 'map_openlayers'
+            'mapWrap': 'map_openlayers',
+            'symbolizer': '#selectSymbol'
+        },
+        control: {
+            'mapWrap': {
+                'featureselect': 'onFeatureSelect',
+                'symbolizerchange': 'onSymbolizerChange'
+            },
+            'symbolizer': {'change': 'onSymbolizerChange'}
         }
     },
 
     launch: function() {
-        var closuresStore = Ext.getStore('Closures');
-        closuresStore.on({
-            load: 'onClosuresLoad',
-            scope: this
-        });
+        var closureStore = Ext.getStore('closures');
+        if(closureStore){
+            closureStore.on({
+                'refresh': this.onClosuresRefresh,
+                scope: this
+            });
+        }
         this.format = new OpenLayers.Format.GeoJSON();
     },
-    onClosuresLoad: function(store, records) {
+    onClosuresRefresh: function(store, records) {
         var map = this.getMapWrap().getMap();
         var lyr = map.getLayersByName('Closures')[0];
         if(records.length) {
@@ -29,6 +37,15 @@ Ext.define('map.controller.maps.OpenLayers', {
             }, this);
             console.log(features.length);
             lyr.addFeatures(features);
+        }
+    },
+    onSymbolizerChange: function(field, value){
+        var mapWrap = this.getMapWrap(); 
+        if(mapWrap){
+            var map = mapWrap.getMap();
+            var lyr = map.getLayersByName('Closures')[0];
+            lyr.styleMap = mapWrap.getStyles()[value];
+            lyr.redraw(true);
         }
     }
 });
