@@ -1,5 +1,6 @@
 Ext.define('map.controller.FilterForm', {
     extend: 'Ext.app.Controller',
+    require: ['map.store.Closures'],
     config: {
         refs: {
             'form': 'FilterForm',
@@ -24,9 +25,29 @@ Ext.define('map.controller.FilterForm', {
     },
     
     onYearFilterChange: function(field, value){
+        var store = Ext.getStore('closures');
+        if(store){
+            if(value == 'All'){
+                store.clearFilter();
+            } else {
+                store.clearFilter(true);
+                store.filterBy(function(rec){
+                    return rec.get('closed').getUTCFullYear() == +value;
+                });
+            }
+        }
     },
     
     onMediaFilterChange: function(field, value){
+        var store = Ext.getStore('closures');
+        if(store){
+            if(value == 'All'){
+                store.clearFilter();
+            } else {
+                store.clearFilter(true);
+                store.filter('media',value);
+            }
+        }
     },
     
     showOpenLayersMap: function(btn, evt){
