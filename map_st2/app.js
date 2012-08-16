@@ -14,7 +14,7 @@ Ext.application({
         'Ext.MessageBox', 'map.util.Config'
     ],
 
-    views: ['FilterForm', 'MapPanel', 'maps.OpenLayers'],
+    views: ['FilterForm', 'MapPanel', 'maps.OpenLayers', 'InfoPopup'],
     
     stores: ['Years', 'Media', 'Closures'],
     

@@ -7,23 +7,56 @@ Ext.define('map.view.maps.OpenLayers',{
         mapCenter: {latitude: 38.50, longitude: -117.02},
         zoomLevel: 6,
         defaultBaseLayer: 'MapBox',
-        styles: null 
+        styles: null,
+        popup: null 
     },
     constructor: function(options) {
         options = options || {};
+        
+        //create layer
         var closures = new OpenLayers.Layer.Vector('Closures', {
-            renderers: ['SVG','Canvas']
+            renderers: ['SVG','Canvas'],
+            eventListeners:{
+                'featureselected':function(evt){
+                    //relay event to map component
+                    this.fireEvent('featureselected',evt.feature);
+                },
+                'featureunselected':function(evt){
+                    //relay event to map component
+                    this.fireEvent('featureunselected',evt.feature);
+                },
+                scope: this
+            }
         });
         options.layers = [closures];
-        var defaultHash = OpenLayers.Util.applyDefaults({
-            fillOpacity: 0.8,
-            strokeColor: 'whitesmoke',
-            strokeWidth: 0.5
-        }, OpenLayers.Feature.Vector.style['default']);
+        
+        //add our select control
+        var select = new OpenLayers.Control.SelectFeature(closures, {autoActivate: true});
+        options.controls = [select];
+        //add our default controls
+        options.controls.push(new OpenLayers.Control.TouchNavigation());
+        options.controls.push(new OpenLayers.Control.Zoom());
+        options.controls.push(new OpenLayers.Control.Attribution());
+        
+        //styling        
+        var styleHash = {
+            'default': OpenLayers.Util.applyDefaults({
+                fillOpacity: 0.8,
+                strokeColor: 'whitesmoke',
+                strokeWidth: 0.5
+            }, OpenLayers.Feature.Vector.style['default']),
+            'select': {
+                strokeColor: 'black',
+                strokeOpacity: 1,
+                strokeWidth: 2,
+                fillOpacity: 1.0
+            }
+        };
+
         var styles = {
-            'decade': new OpenLayers.StyleMap(defaultHash, {extendDefault: true}),
-            'media': new OpenLayers.StyleMap(defaultHash, {extendDefault: true}),
-            'container': new OpenLayers.StyleMap(defaultHash, {extendDefault: true})
+            'decade': new OpenLayers.StyleMap(styleHash, {extendDefault: true}),
+            'media': new OpenLayers.StyleMap(styleHash, {extendDefault: true}),
+            'container': new OpenLayers.StyleMap(styleHash, {extendDefault: true})
         };
         styles.decade.addUniqueValueRules('default', 'closedate', {
             1980: {fillColor: 'red'},
@@ -61,7 +94,9 @@ Ext.define('map.view.maps.OpenLayers',{
             return {container: (feature.attributes.container) ? 'yes' : 'no'};
         });
         options.styles = styles;
+        //set vector layer style
         closures.styleMap = styles.decade;
+        //call superclass
         this.callParent([options]);
     }
 });

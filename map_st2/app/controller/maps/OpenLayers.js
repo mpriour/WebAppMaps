@@ -1,15 +1,18 @@
 Ext.define('map.controller.maps.OpenLayers', {
     extend: 'Ext.app.Controller',
-    requires: ['map.store.Closures'],
+    requires: ['map.store.Closures', 'map.view.InfoPopup'],
 
     config: {
         refs: {
             'mapWrap': 'map_openlayers',
-            'symbolizer': '#selectSymbol'
+            'symbolizer': '#selectSymbol',
+            'popup': 'MapPanel InfoPopup',
+            'mapPanel': 'MapPanel'
         },
         control: {
             'mapWrap': {
-                'featureselect': 'onFeatureSelect',
+                'featureselected': 'onFeatureSelect',
+                'featureunselected': 'onFeatureUnselect',
                 'symbolizerchange': 'onSymbolizerChange'
             },
             'symbolizer': {'change': 'onSymbolizerChange'}
@@ -44,6 +47,36 @@ Ext.define('map.controller.maps.OpenLayers', {
             var lyr = map.getLayersByName('Closures')[0];
             lyr.styleMap = mapWrap.getStyles()[value];
             lyr.redraw(true);
+        }
+    },
+    onFeatureSelect: function(feature){
+        var mapWrap = this.getMapWrap(); 
+        if(mapWrap){
+            var store = Ext.getStore('closures');
+            var popup = mapWrap.getPopup();
+            //find the feature record in the store
+            var rec = store && store.findRecord('id', feature.fid);
+            if(rec){
+                if(!popup){
+                    popup = Ext.create('map.view.InfoPopup', {data:rec.data, map:mapWrap});
+                    this.getMapPanel().add(popup);
+                    mapWrap.setPopup(popup);
+                } else {
+                    popup.setData(rec.data);
+                }
+                if(!map.util.Config.getUseFeaturePopup()){
+                    popup.showBy(mapWrap, map.util.Config.getPopupAlignment());
+                } else {
+                    popup.show();
+                }
+            }
+        }
+    },
+    onFeatureUnselect: function(feature){
+        var mapWrap = this.getMapWrap();
+        var popup = this.getPopup() || mapWrap.getPopup(); 
+        if(popup){
+            popup.hide();
         }
     }
 });
