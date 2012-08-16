@@ -1,5 +1,5 @@
 {
-    "name" : "map_mproject",
+    "name" : "map",
     "mode": "debug",
     "debugLevel": 1,
     "eliminate": false,
