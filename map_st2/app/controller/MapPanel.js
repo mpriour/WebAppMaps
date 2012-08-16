@@ -3,7 +3,8 @@ Ext.define('map.controller.MapPanel', {
     requires: ['map.view.MapPanel'],
     config: {
         refs: {
-            'form': 'FilterForm'
+            'form': 'FilterForm',
+            'popup': 'InfoPopup'
         },
         control: {
             '#btnBackFilter': {
@@ -13,8 +14,12 @@ Ext.define('map.controller.MapPanel', {
     },
     onBackButtonTap: function(btn, evt){
         var form = this.getForm();
+        var popup = this.getPopup();
         if(form){
             Ext.Viewport.setActiveItem(form);
+        }
+        if(popup){
+            popup.hide();
         }
     }
 });
