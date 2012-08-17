@@ -6,13 +6,17 @@
     "minify": false,
     "proxies": [
         {
-            "baseUrl": "http://your.server.com",
-            "proxyAlias": "myServer"
+            "baseUrl": "http://mapstory.dev.opengeo.org:8080",
+            "proxyAlias": "mapstory"
         },
         {
-            "baseUrl": "http://your.server2.com",
-            "proxyAlias": "myServer2"
+            "baseUrl": "http://localhost",
+            "proxyAlias": "local"
         }
+    ],
+    "libraries": [
+        {"name": "../../externals/openlayers",
+        "refs": ["lib/OpenLayers.js"]}
     ],
     "htmlHeader": [
         "<meta charset=\"utf-8\">",
