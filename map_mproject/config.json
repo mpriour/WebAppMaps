@@ -15,8 +15,9 @@
         }
     ],
     "libraries": [
-        {"name": "../../externals/openlayers",
-        "refs": ["lib/OpenLayers.js"]}
+        {"name": "openlayers",
+        "refs": ["OpenLayers.debug.js"]},
+        {"name": "../data", "refs":["*"]}
     ],
     "htmlHeader": [
         "<meta charset=\"utf-8\">",
