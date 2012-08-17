@@ -1,5 +1,12 @@
 map.FilterPage = M.PageView.design({
-
+    /* Use the 'events' property to bind events like 'pageshow' */
+    events: {
+        pageshow: {
+            target: map.FilterController,
+            action: 'init'
+        }
+    },
+    
     childViews: 'header content',
 
     header: M.ToolbarView.design({
