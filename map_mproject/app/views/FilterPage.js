@@ -15,9 +15,9 @@ map.FilterPage = M.PageView.design({
     }),
 
     content: M.FormView.design({
-        childViews: 'symbolizer yearSelect mediaSelect buttonGroup',
+        childViews: 'symbolSelect yearSelect mediaSelect buttonGroup',
         symbolSelect: M.SelectionListView.design({
-            childViews: 'item1, item2, item3',
+            childViews: 'item1 item2 item3',
             isGrouped: true,
             selectionMode: M.SINGLE_SELECTION_DIALOG,
             label: 'Symbolize By',
@@ -72,10 +72,11 @@ map.FilterPage = M.PageView.design({
             }
         }),
         buttonGroup: M.ButtonGroupView.design({
+            childViews: 'leafletBtn openlayersBtn',
             isGrouped: true,
             label: 'View Results In',
             leafletBtn: M.ButtonView.design({
-                text: 'Leaflet',
+                value: 'Leaflet',
                 disabled: true,
                 events: {
                     'tap': {
@@ -85,7 +86,7 @@ map.FilterPage = M.PageView.design({
                 }
             }),
             openlayersBtn: M.ButtonView.design({
-                text: 'OpenLayers',
+                value: 'OpenLayers',
                 events: {
                     'tap': {
                         target: map.FilterController,

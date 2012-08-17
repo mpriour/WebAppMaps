@@ -21,6 +21,7 @@ map.FilterController = M.Controller.extend({
             /* do something here, when page is loaded the first time. */
            this.loadYearItems();
            this.loadMediaItems();
+           map.ClosuresModel.find();
         }
         /* do something, for any other load. */
     },
@@ -50,13 +51,13 @@ map.FilterController = M.Controller.extend({
      */
     loadYearItems: function(){
         M.Request.init({
-            url: '../../data/year.json',
+            url: 'years.json',
             method: 'GET',
             isJSON: true,
             callbacks:{
                 success: {
                     target: this,
-                    action: buildYearItems
+                    action: this.buildYearItems
                 }
             }
         }).send();
@@ -64,24 +65,31 @@ map.FilterController = M.Controller.extend({
     
     loadMediaItems: function(){
         M.Request.init({
-            url: '../../data/media.json',
+            url: 'media.json',
             method: 'GET',
             isJSON: true,
             callbacks:{
                 success: {
                     target: this,
-                    action: buildMediaItems
+                    action: this.buildMediaItems
                 }
             }
         }).send();        
     },
     
     buildYearItems: function(data, msg, req){
-        console.log(data);
+        this.set('yearItems', this.expandArray(data));
     },
     
     buildMediaItems: function(data, msg, req){
-        console.log(data);
-    }
+        this.set('mediaItems', this.expandArray(data));
+    },
     
+    expandArray: function(list){
+        var arr = [];
+        for(var i=0,len=list.length;i<len;i++){
+            arr[i] = {label: list[i], value: list[i]};
+        }
+        return arr;
+    }
 });
